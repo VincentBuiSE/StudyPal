@@ -1,0 +1,1 @@
+StudyPal is a command-line flashcard application designed to help the user study for multiple subjects by quizzing them with random questions from a bank of questions and answers that the user inputs into the program. This was a two-person project, built as part of my coursework. 
