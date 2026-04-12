@@ -1,354 +1,420 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Flashcard Quiz App</title>
+<title>Flashcard App</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: Georgia, serif; background: #f5f0e8; color: #1a1a1a; min-height: 100vh; }
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 20px;
+    }
 
-.app { max-width: 480px; margin: 0 auto; padding: 2rem 1rem; }
+    h1 {
+        color: #333;
+        text-align: center;
+    }
 
-.screen { display: none; }
-.screen.active { display: block; }
+    h2 {
+        color: #333;
+    }
 
-h1 { font-size: 28px; font-weight: normal; margin-bottom: 0.25rem; letter-spacing: -0.5px; }
-h2 { font-size: 20px; font-weight: normal; margin-bottom: 1rem; }
-.subtitle { font-size: 14px; color: #666; margin-bottom: 1.5rem; font-style: italic; }
+    .container {
+        max-width: 500px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+    }
 
-.btn {
-  display: block; width: 100%; padding: 12px 16px; margin-bottom: 8px;
-  background: #fff; border: 1px solid #d0c8b8; border-radius: 6px;
-  font-size: 15px; font-family: Georgia, serif; color: #1a1a1a;
-  cursor: pointer; text-align: left; transition: all 0.15s;
-}
-.btn:hover { background: #ede8de; border-color: #b0a898; }
-.btn:active { transform: scale(0.99); }
-.btn.primary {
-  background: #1a1a1a; color: #f5f0e8; border-color: #1a1a1a;
-  text-align: center; font-size: 15px;
-}
-.btn.primary:hover { background: #333; }
-.btn.back {
-  width: auto; background: none; border: none; font-size: 13px;
-  color: #888; padding: 0; margin-bottom: 1.25rem; cursor: pointer;
-}
-.btn.back:hover { color: #333; background: none; }
+    .screen {
+        display: none;
+    }
 
-input, textarea {
-  width: 100%; padding: 10px 12px; border: 1px solid #d0c8b8;
-  border-radius: 6px; font-size: 15px; font-family: Georgia, serif;
-  color: #1a1a1a; background: #fff; margin-bottom: 10px;
-  outline: none; transition: border-color 0.15s;
-}
-input:focus, textarea:focus { border-color: #888; }
-textarea { height: 80px; resize: vertical; }
+    .screen.active {
+        display: block;
+    }
 
-label.field-label {
-  display: block; font-size: 12px; color: #888; margin-bottom: 4px;
-  text-transform: uppercase; letter-spacing: 0.5px;
-}
+    button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin: 5px 0px;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 16px;
+    }
 
-.card-item {
-  background: #fff; border: 1px solid #d0c8b8; border-radius: 6px;
-  padding: 12px 14px; margin-bottom: 8px;
-}
-.card-item .q { font-size: 14px; font-weight: bold; color: #1a1a1a; }
-.card-item .a { font-size: 13px; color: #666; margin-top: 4px; font-style: italic; }
-.card-item .remove-btn {
-  float: right; font-size: 12px; color: #c0392b; background: none;
-  border: none; cursor: pointer; padding: 0; font-family: Georgia, serif;
-}
-.card-item .remove-btn:hover { text-decoration: underline; }
+    button:hover {
+        background-color: #45a049;
+    }
 
-.quiz-card {
-  background: #fff; border: 1px solid #d0c8b8; border-radius: 8px;
-  padding: 2rem 1.5rem; margin-bottom: 1rem; min-height: 100px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; text-align: center; color: #1a1a1a; line-height: 1.5;
-}
+    #backBtn, #backBtn2, #backBtn3, #backBtn4, #backBtn5 {
+        background-color: #aaa;
+        width: auto;
+        padding: 6px 14px;
+        font-size: 14px;
+    }
 
-.result-correct { color: #27ae60; font-size: 14px; margin-bottom: 8px; font-style: italic; }
-.result-wrong { color: #c0392b; font-size: 14px; margin-bottom: 8px; font-style: italic; }
+    input[type="text"] {
+        width: 95%;
+        padding: 8px;
+        margin: 5px 0px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 15px;
+    }
 
-.score-big { font-size: 52px; text-align: center; margin: 1rem 0 0.25rem; letter-spacing: -2px; }
-.score-label { font-size: 14px; color: #666; text-align: center; margin-bottom: 2rem; font-style: italic; }
+    textarea {
+        width: 95%;
+        padding: 8px;
+        margin: 5px 0px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 15px;
+        height: 80px;
+    }
 
-.progress { font-size: 12px; color: #888; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .flashcard {
+        background-color: #fff9c4;
+        border: 1px solid #f0c040;
+        border-radius: 6px;
+        padding: 10px;
+        margin: 8px 0px;
+    }
 
-.empty { text-align: center; color: #aaa; font-size: 14px; padding: 2.5rem 0; font-style: italic; }
+    .flashcard p {
+        margin: 3px 0px;
+        font-size: 14px;
+    }
 
-.count-badge { float: right; font-size: 12px; color: #aaa; font-family: monospace; margin-top: 1px; }
+    .removeBtn {
+        background-color: #e74c3c;
+        width: auto;
+        padding: 4px 10px;
+        font-size: 13px;
+        float: right;
+    }
 
-.divider { border: none; border-top: 1px solid #d0c8b8; margin: 1.25rem 0; }
+    .removeBtn:hover {
+        background-color: #c0392b;
+    }
 
-.toast {
-  position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
-  background: #1a1a1a; color: #f5f0e8; border-radius: 4px;
-  padding: 8px 18px; font-size: 13px; opacity: 0;
-  transition: opacity 0.2s; pointer-events: none; white-space: nowrap;
-  font-family: Georgia, serif;
-}
-.toast.show { opacity: 1; }
+    #quizBox {
+        background-color: #e8f4f8;
+        border: 2px solid #3498db;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        font-size: 18px;
+        margin: 10px 0px;
+        min-height: 80px;
+    }
 
-.import-label {
-  display: block; width: 100%; padding: 12px 16px; margin-bottom: 8px;
-  background: #fff; border: 1px solid #d0c8b8; border-radius: 6px;
-  font-size: 15px; font-family: Georgia, serif; color: #1a1a1a;
-  cursor: pointer; text-align: left; transition: all 0.15s;
-}
-.import-label:hover { background: #ede8de; border-color: #b0a898; }
+    #feedback {
+        font-size: 15px;
+        font-weight: bold;
+        margin: 8px 0px;
+    }
+
+    .correct { color: green; }
+    .wrong { color: red; }
+
+    #scoreDiv {
+        text-align: center;
+        font-size: 22px;
+        margin: 20px 0px;
+    }
+
+    #nextBtn, #submitBtn {
+        background-color: #3498db;
+    }
+
+    #nextBtn:hover, #submitBtn:hover {
+        background-color: #2980b9;
+    }
+
+    #saveCardBtn {
+        background-color: #9b59b6;
+    }
+
+    #saveCardBtn:hover {
+        background-color: #8e44ad;
+    }
 </style>
 </head>
 <body>
-<div class="app">
 
-  <div id="s-subjects" class="screen active">
-    <h1>Flashcards</h1>
-    <p class="subtitle">Choose a subject to get started</p>
-    <button class="btn" onclick="pickSubject('mathematics')">Mathematics <span class="count-badge" id="cnt-mathematics"></span></button>
-    <button class="btn" onclick="pickSubject('science')">Science <span class="count-badge" id="cnt-science"></span></button>
-    <button class="btn" onclick="pickSubject('history')">History <span class="count-badge" id="cnt-history"></span></button>
-    <button class="btn" onclick="pickSubject('english')">English <span class="count-badge" id="cnt-english"></span></button>
-    <hr class="divider">
-    <button class="btn" onclick="exportData()">Export all cards</button>
-    <label class="import-label">Import cards <input type="file" accept=".json" id="import-file" style="display:none;" onchange="importData(event)"></label>
-  </div>
+<div class="container">
+    <h1>Flashcard App</h1>
 
-  <div id="s-menu" class="screen">
-    <button class="btn back" onclick="show('s-subjects');updateCounts()">← Back</button>
-    <h2 id="menu-title">Subject</h2>
-    <button class="btn" onclick="show('s-create')">Create flashcards</button>
-    <button class="btn" onclick="startQuiz()">Quiz mode</button>
-    <button class="btn" onclick="show('s-show')">Show flashcards</button>
-    <button class="btn" onclick="show('s-remove')">Remove flashcards</button>
-  </div>
+    <div id="screen0" class="screen active">
+        <h2>Pick a Subject</h2>
+        <button onclick="goToSubject('math')">Math</button>
+        <button onclick="goToSubject('science')">Science</button>
+        <button onclick="goToSubject('history')">History</button>
+        <button onclick="goToSubject('english')">English</button>
+        <br><br>
+        <button onclick="exportCards()" style="background-color:#888;">Export Cards</button>
+        <label style="display:block; margin-top:5px;">
+            <button style="background-color:#888;" onclick="document.getElementById('importFile').click()">Import Cards</button>
+            <input type="file" id="importFile" style="display:none;" accept=".json" onchange="importCards(event)">
+        </label>
+    </div>
 
-  <div id="s-create" class="screen">
-    <button class="btn back" onclick="show('s-menu')">← Back</button>
-    <h2>Add a flashcard</h2>
-    <label class="field-label">Question</label>
-    <input type="text" id="new-q" placeholder="Enter question..." />
-    <label class="field-label">Answer</label>
-    <textarea id="new-a" placeholder="Enter answer..."></textarea>
-    <button class="btn primary" onclick="saveCard()">Save flashcard</button>
-  </div>
+    <div id="screen1" class="screen">
+        <button id="backBtn" onclick="goBack()">Back</button>
+        <h2 id="subjectTitle">Subject</h2>
+        <button onclick="showScreen('screen2')">Add Flashcard</button>
+        <button onclick="startQuiz()">Quiz Me!</button>
+        <button onclick="showCards()">View Cards</button>
+        <button onclick="showRemove()">Remove a Card</button>
+    </div>
 
-  <div id="s-show" class="screen">
-    <button class="btn back" onclick="show('s-menu')">← Back</button>
-    <h2>Flashcards</h2>
-    <div id="show-list"></div>
-  </div>
+    <div id="screen2" class="screen">
+        <button id="backBtn2" onclick="showScreen('screen1')">Back</button>
+        <h2>Add a Card</h2>
+        <p>Question:</p>
+        <input type="text" id="questionInput" placeholder="type question here" /><br>
+        <p>Answer:</p>
+        <textarea id="answerInput" placeholder="type answer here"></textarea><br>
+        <button id="saveCardBtn" onclick="saveCard()">Save Card</button>
+        <p id="savedMsg" style="color:green; display:none;">Card saved!</p>
+    </div>
 
-  <div id="s-remove" class="screen">
-    <button class="btn back" onclick="show('s-menu')">← Back</button>
-    <h2>Remove flashcards</h2>
-    <div id="remove-list"></div>
-  </div>
+    <div id="screen3" class="screen">
+        <button id="backBtn3" onclick="showScreen('screen1')">Back</button>
+        <h2>Your Cards</h2>
+        <div id="cardList"></div>
+    </div>
 
-  <div id="s-quiz" class="screen">
-    <button class="btn back" onclick="show('s-menu')">← Back to menu</button>
-    <p class="progress" id="quiz-progress"></p>
-    <div class="quiz-card" id="quiz-question"></div>
-    <input type="text" id="quiz-answer" placeholder="Your answer..." onkeydown="if(event.key==='Enter')checkAnswer()" />
-    <button class="btn primary" onclick="checkAnswer()">Submit</button>
-    <div id="quiz-feedback" style="margin-top:10px;display:none;"></div>
-    <button class="btn" id="quiz-next" style="display:none;" onclick="nextQuestion()">Next question →</button>
-  </div>
+    <div id="screen4" class="screen">
+        <button id="backBtn4" onclick="showScreen('screen1')">Back</button>
+        <h2>Remove a Card</h2>
+        <div id="removeList"></div>
+    </div>
 
-  <!-- Score -->
-  <div id="s-score" class="screen">
-    <button class="btn back" onclick="show('s-menu')">← Back to menu</button>
-    <p class="score-big" id="score-num"></p>
-    <p class="score-label" id="score-label"></p>
-    <button class="btn primary" onclick="startQuiz()">Play again</button>
-  </div>
+    <div id="screen5" class="screen">
+        <button id="backBtn5" onclick="showScreen('screen1')">Back</button>
+        <p id="quizProgress" style="color:#888; font-size:13px;"></p>
+        <div id="quizBox">loading question...</div>
+        <input type="text" id="quizAnswer" placeholder="your answer..." onkeydown="if(event.key=='Enter') checkAns()" />
+        <button id="submitBtn" onclick="checkAns()">Submit</button>
+        <p id="feedback"></p>
+        <button id="nextBtn" onclick="nextQ()" style="display:none;">Next</button>
+    </div>
 
+    <div id="screen6" class="screen">
+        <button onclick="showScreen('screen1')" style="background-color:#aaa;width:auto;padding:6px 14px;font-size:14px;">Back</button>
+        <div id="scoreDiv"></div>
+        <button onclick="startQuiz()">Play Again</button>
+    </div>
 </div>
 
-<div class="toast" id="toast"></div>
-
 <script>
-const STORAGE_KEY = 'flashcard_app_data';
-let currentSubject = '';
-let quizCards = [], quizIdx = 0, quizScore = 0;
+    var currentSubject = "";
+    var quizCards = [];
+    var quizIndex = 0;
+    var score = 0;
 
-function loadDB() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
-}
-function saveDB(db) {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(db)); } catch { showToast('Could not save.'); }
-}
-function getCards() { return loadDB()[currentSubject] || []; }
-function setCards(arr) {
-  const db = loadDB();
-  db[currentSubject] = arr;
-  saveDB(db);
-}
+    function showScreen(id) {
+        var screens = document.querySelectorAll('.screen');
+        for (var i = 0; i < screens.length; i++) {
+            screens[i].classList.remove('active');
+        }
+        document.getElementById(id).classList.add('active');
+    }
 
-function updateCounts() {
-  const db = loadDB();
-  ['mathematics','science','history','english'].forEach(s => {
-    const el = document.getElementById('cnt-' + s);
-    const n = (db[s] || []).length;
-    el.textContent = n > 0 ? n + ' card' + (n !== 1 ? 's' : '') : '';
-  });
-}
+    function goToSubject(subject) {
+        currentSubject = subject;
+        document.getElementById('subjectTitle').innerText = subject.charAt(0).toUpperCase() + subject.slice(1);
+        showScreen('screen1');
+    }
 
-function show(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  if (id === 's-show') renderShow();
-  if (id === 's-remove') renderRemove();
-}
+    function goBack() {
+        showScreen('screen0');
+    }
 
-function pickSubject(s) {
-  currentSubject = s;
-  document.getElementById('menu-title').textContent = s.charAt(0).toUpperCase() + s.slice(1);
-  show('s-menu');
-}
+    function getCards() {
+        var data = localStorage.getItem('cards_' + currentSubject);
+        if (data == null) return [];
+        return JSON.parse(data);
+    }
 
-function saveCard() {
-  const q = document.getElementById('new-q').value.trim();
-  const a = document.getElementById('new-a').value.trim();
-  if (!q || !a) return;
-  const cards = getCards();
-  cards.push({ question: q, answer: a });
-  setCards(cards);
-  document.getElementById('new-q').value = '';
-  document.getElementById('new-a').value = '';
-  document.getElementById('new-q').focus();
-  showToast('Flashcard saved!');
-}
+    function saveCards(cards) {
+        localStorage.setItem('cards_' + currentSubject, JSON.stringify(cards));
+    }
 
-function renderShow() {
-  const list = document.getElementById('show-list');
-  const cards = getCards();
-  if (!cards.length) { list.innerHTML = '<p class="empty">No flashcards yet.</p>'; return; }
-  list.innerHTML = cards.map(c =>
-    `<div class="card-item"><div class="q">Q: ${esc(c.question)}</div><div class="a">A: ${esc(c.answer)}</div></div>`
-  ).join('');
-}
+    function saveCard() {
+        var q = document.getElementById('questionInput').value.trim();
+        var a = document.getElementById('answerInput').value.trim();
 
-function renderRemove() {
-  const list = document.getElementById('remove-list');
-  const cards = getCards();
-  if (!cards.length) { list.innerHTML = '<p class="empty">No flashcards to remove.</p>'; return; }
-  list.innerHTML = cards.map((c, i) =>
-    `<div class="card-item"><button class="remove-btn" onclick="removeCard(${i})">Remove</button><div class="q">${esc(c.question)}</div><div class="a">${esc(c.answer)}</div></div>`
-  ).join('');
-}
+        if (q == "" || a == "") {
+            alert("Please fill in both fields!");
+            return;
+        }
 
-function removeCard(i) {
-  const cards = getCards();
-  cards.splice(i, 1);
-  setCards(cards);
-  renderRemove();
-  showToast('Flashcard removed.');
-}
+        var cards = getCards();
+        cards.push({question: q, answer: a});
+        saveCards(cards);
 
-function startQuiz() {
-  const cards = getCards();
-  if (!cards.length) { showToast('No flashcards to quiz on!'); return; }
-  quizCards = [...cards].sort(() => Math.random() - 0.5);
-  quizIdx = 0; quizScore = 0;
-  show('s-quiz');
-  loadQuestion();
-}
+        document.getElementById('questionInput').value = '';
+        document.getElementById('answerInput').value = '';
+        document.getElementById('savedMsg').style.display = 'block';
+        setTimeout(function() {
+            document.getElementById('savedMsg').style.display = 'none';
+        }, 2000);
+    }
 
-function loadQuestion() {
-  const c = quizCards[quizIdx];
-  document.getElementById('quiz-progress').textContent = `Question ${quizIdx + 1} of ${quizCards.length}`;
-  document.getElementById('quiz-question').textContent = c.question;
-  document.getElementById('quiz-answer').value = '';
-  document.getElementById('quiz-answer').disabled = false;
-  document.getElementById('quiz-feedback').style.display = 'none';
-  document.getElementById('quiz-next').style.display = 'none';
-  document.getElementById('quiz-next').onclick = nextQuestion;
-  document.getElementById('quiz-answer').focus();
-}
+    function showCards() {
+        var cards = getCards();
+        var html = '';
+        if (cards.length == 0) {
+            html = '<p>No cards yet!</p>';
+        }
+        for (var i = 0; i < cards.length; i++) {
+            html += '<div class="flashcard">';
+            html += '<p><b>Q:</b> ' + cards[i].question + '</p>';
+            html += '<p><b>A:</b> ' + cards[i].answer + '</p>';
+            html += '</div>';
+        }
+        document.getElementById('cardList').innerHTML = html;
+        showScreen('screen3');
+    }
 
-function checkAnswer() {
-  const input = document.getElementById('quiz-answer');
-  const userAns = input.value.trim().toLowerCase();
-  if (!userAns) return;
-  const correct = quizCards[quizIdx].answer.toLowerCase();
-  input.disabled = true;
-  const fb = document.getElementById('quiz-feedback');
-  fb.style.display = 'block';
-  if (userAns === correct) {
-    fb.innerHTML = '<p class="result-correct">Correct!</p>';
-    quizScore++;
-  } else {
-    fb.innerHTML = `<p class="result-wrong">Wrong! Correct answer: ${esc(quizCards[quizIdx].answer)}</p>`;
-  }
-  const nextBtn = document.getElementById('quiz-next');
-  nextBtn.style.display = 'block';
-  if (quizIdx + 1 >= quizCards.length) {
-    nextBtn.textContent = 'See results';
-    nextBtn.onclick = showScore;
-  } else {
-    nextBtn.textContent = 'Next question →';
-  }
-}
+    function showRemove() {
+        var cards = getCards();
+        var html = '';
+        if (cards.length == 0) {
+            html = '<p>No cards to remove.</p>';
+        }
+        for (var i = 0; i < cards.length; i++) {
+            html += '<div class="flashcard">';
+            html += '<button class="removeBtn" onclick="removeCard(' + i + ')">Delete</button>';
+            html += '<p><b>Q:</b> ' + cards[i].question + '</p>';
+            html += '<p><b>A:</b> ' + cards[i].answer + '</p>';
+            html += '</div>';
+        }
+        document.getElementById('removeList').innerHTML = html;
+        showScreen('screen4');
+    }
 
-function nextQuestion() { quizIdx++; loadQuestion(); }
+    function removeCard(index) {
+        var cards = getCards();
+        cards.splice(index, 1);
+        saveCards(cards);
+        showRemove();
+    }
 
-function showScore() {
-  const total = quizCards.length;
-  const pct = Math.round((quizScore / total) * 100);
-  document.getElementById('score-num').textContent = `${quizScore} / ${total}`;
-  document.getElementById('score-label').textContent = `${pct}% — ${pct >= 80 ? 'Great job!' : pct >= 50 ? 'Keep practicing!' : 'Keep studying!'}`;
-  show('s-score');
-}
+    function startQuiz() {
+        var cards = getCards();
+        if (cards.length == 0) {
+            alert("You don't have any cards yet!");
+            return;
+        }
 
-function exportData() {
-  const db = loadDB();
-  const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'flashcards.json'; a.click();
-  URL.revokeObjectURL(url);
-  showToast('Cards exported!');
-}
 
-function importData(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const imported = JSON.parse(e.target.result);
-      const db = loadDB();
-      for (const subject in imported) {
-        if (!db[subject]) db[subject] = [];
-        imported[subject].forEach(card => {
-          const exists = db[subject].some(c => c.question === card.question);
-          if (!exists) db[subject].push(card);
-        });
-      }
-      saveDB(db);
-      updateCounts();
-      showToast('Cards imported!');
-    } catch { showToast('Invalid file.'); }
-  };
-  reader.readAsText(file);
-  event.target.value = '';
-}
+        quizCards = cards.slice();
+        for (var i = quizCards.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = quizCards[i];
+            quizCards[i] = quizCards[j];
+            quizCards[j] = temp;
+        }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2000);
-}
+        quizIndex = 0;
+        score = 0;
+        showScreen('screen5');
+        loadQuestion();
+    }
 
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+    function loadQuestion() {
+        document.getElementById('quizProgress').innerText = 'Question ' + (quizIndex + 1) + ' of ' + quizCards.length;
+        document.getElementById('quizBox').innerText = quizCards[quizIndex].question;
+        document.getElementById('quizAnswer').value = '';
+        document.getElementById('quizAnswer').disabled = false;
+        document.getElementById('feedback').innerText = '';
+        document.getElementById('feedback').className = '';
+        document.getElementById('nextBtn').style.display = 'none';
+        document.getElementById('quizAnswer').focus();
+    }
 
-updateCounts();
+    function checkAns() {
+        var userAns = document.getElementById('quizAnswer').value.trim().toLowerCase();
+        var correctAns = quizCards[quizIndex].answer.trim().toLowerCase();
+
+        document.getElementById('quizAnswer').disabled = true;
+
+        if (userAns == correctAns) {
+            document.getElementById('feedback').innerText = 'Correct!!';
+            document.getElementById('feedback').className = 'correct';
+            score++;
+        } else {
+            document.getElementById('feedback').innerText = 'Wrong. Answer was: ' + quizCards[quizIndex].answer;
+            document.getElementById('feedback').className = 'wrong';
+        }
+
+        if (quizIndex + 1 >= quizCards.length) {
+            document.getElementById('nextBtn').innerText = 'See Score';
+            document.getElementById('nextBtn').onclick = showScore;
+        } else {
+            document.getElementById('nextBtn').innerText = 'Next';
+            document.getElementById('nextBtn').onclick = nextQ;
+        }
+        document.getElementById('nextBtn').style.display = 'block';
+    }
+
+    function nextQ() {
+        quizIndex++;
+        loadQuestion();
+    }
+
+    function showScore() {
+        var pct = Math.round((score / quizCards.length) * 100);
+        var msg = '';
+        if (pct >= 80) msg = 'Nice job!';
+        else if (pct >= 50) msg = 'Keep studying!';
+        else msg = 'You need more practice lol';
+
+        document.getElementById('scoreDiv').innerHTML = '<p>Score: ' + score + '/' + quizCards.length + '</p><p>' + pct + '%</p><p>' + msg + '</p>';
+        showScreen('screen6');
+    }
+
+    function exportCards() {
+        var allData = {};
+        var subjects = ['math', 'science', 'history', 'english'];
+        for (var i = 0; i < subjects.length; i++) {
+            var data = localStorage.getItem('cards_' + subjects[i]);
+            if (data) allData[subjects[i]] = JSON.parse(data);
+        }
+        var blob = new Blob([JSON.stringify(allData)], {type: 'application/json'});
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'flashcards.json';
+        a.click();
+    }
+
+    function importCards(event) {
+        var file = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                var data = JSON.parse(e.target.result);
+                var subjects = Object.keys(data);
+                for (var i = 0; i < subjects.length; i++) {
+                    localStorage.setItem('cards_' + subjects[i], JSON.stringify(data[subjects[i]]));
+                }
+                alert('Cards imported!');
+            } catch(err) {
+                alert('Something went wrong reading the file');
+            }
+        };
+        reader.readAsText(file);
+    }
 </script>
+
 </body>
 </html>
